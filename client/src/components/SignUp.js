@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
+axios.defaults.withCredentials = true;
+
 export default function SignUp() {
   //이름, 이메일, 비밀번호, 비밀번호 확인
   const [nickname, setNickname] = useState("");
@@ -33,7 +35,7 @@ export default function SignUp() {
   const onSubmit = async () => {
     await axios
       .post(
-        `${process.env.SERVER_EC2_ENDPOINT}/user`,
+        `${process.env.REACT_APP_SERVER_EC2_ENDPOINT}/user`,
         {
           email,
           password,
@@ -46,12 +48,17 @@ export default function SignUp() {
         }
       )
       .then((res) => {
-        if (res.status === 200) {
-          history.push("/");
-        }
+        history.push("/");
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response);
+        if (err.response.message === "email overlap") {
+          setSignupMessage("이미 가입된 이메일입니다");
+        } else if (err.response.message === "nickname overlap") {
+          setSignupMessage("이미 사용 중인 닉네임입니다");
+        } else {
+          console.log(err);
+        }
       });
   };
 
@@ -157,7 +164,9 @@ export default function SignUp() {
               type="text"
               name="nickname"
             />
-            {nickname.length > 0 && <span>{nicknameMessage}</span>}
+            {nickname.length > 0 && (
+              <span className="text-sm text-indigo-500">{nicknameMessage}</span>
+            )}
           </div>
           <div className="flex flex-col mb-4">
             <label
@@ -172,7 +181,15 @@ export default function SignUp() {
               type="text"
               name="email"
             />
-            {email.length > 0 && <span>{emailMessage}</span>}
+            {email.length > 0 && (
+              <span
+                className={
+                  isEmail ? "text-sm text-indigo-500" : "text-sm text-red-400"
+                }
+              >
+                {emailMessage}
+              </span>
+            )}
           </div>
           <div className="flex flex-col mb-4">
             <label
@@ -187,7 +204,17 @@ export default function SignUp() {
               type="password"
               name="password1"
             />
-            {password.length > 0 && <span>{passwordMessage}</span>}
+            {password.length > 0 && (
+              <span
+                className={
+                  isPassword
+                    ? "text-sm text-indigo-500"
+                    : "text-sm text-red-400"
+                }
+              >
+                {passwordMessage}
+              </span>
+            )}
           </div>
           <div className="flex flex-col mb-4">
             <label
@@ -203,7 +230,15 @@ export default function SignUp() {
               name="password2"
             />
             {passwordConfirm.length > 0 && (
-              <span>{passwordConfirmMessage}</span>
+              <span
+                className={
+                  isPasswordConfirm
+                    ? "text-sm text-indigo-500"
+                    : "text-sm text-red-400"
+                }
+              >
+                {passwordConfirmMessage}
+              </span>
             )}
           </div>
 
@@ -224,7 +259,9 @@ export default function SignUp() {
                 <option>Female</option>
                 <option>Non binary</option>
               </select>
-              {gender.length > 0 && <span>{genderMessage}</span>}
+              {gender.length > 0 && (
+                <span className="text-sm text-indigo-500">{genderMessage}</span>
+              )}
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg
                   className="fill-current h-4 w-4"
@@ -251,7 +288,9 @@ export default function SignUp() {
               name="dateOfBirth"
               placeholder="yyyymmdd"
             />
-            {dob.length > 0 && <span>{dobMessage}</span>}
+            {dob.length > 0 && (
+              <span className="text-sm text-indigo-500">{dobMessage}</span>
+            )}
           </div>
           <button
             disabled={

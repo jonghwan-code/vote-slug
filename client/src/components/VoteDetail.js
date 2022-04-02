@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 
-export default function VoteDetail({ dummyData, history, match }) {
-  const [data, setData] = useState({});
-  const { id } = match.params;
+export default function VoteDetail({ voteInfo }) {
+  const params = useParams();
+  const history = useHistory();
+  const id = Number(params.id);
 
-  console.log(dummyData);
-  const getVoteById = () => {
-    const array = dummyData.filter((x) => x.id === id);
+  const [data, setData] = useState();
+  console.log(voteInfo);
+  const getVoteById = (id) => {
+    const array = voteInfo.filter((x) => x.id === id);
     if (array.length === 1) {
       return array[0];
     }
@@ -25,20 +28,20 @@ export default function VoteDetail({ dummyData, history, match }) {
         {data ? (
           <>
             <div className="post-view-row">
-              <label>제목</label>
-              <label>{data.title}</label>
+              <label>제목:</label>
+              <label>{data.voteTite}</label>
             </div>
             <div className="post-view-row">
-              <label>카테고리</label>
+              <label>카테고리:</label>
               <label>{data.category}</label>
             </div>
             <div className="post-view-row">
-              <label>옵션1</label>
+              <label>옵션1:</label>
               <label>{data.voteOption1}</label>
             </div>
             <div className="post-view-row">
-              <label>옵션2</label>
-              <div>{data.voteOption1}</div>
+              <label>옵션2:</label>
+              <label>{data.voteOption2}</label>
             </div>
           </>
         ) : (

@@ -1,13 +1,23 @@
-import { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  useHistory,
+  Redirect,
+} from "react-router-dom";
 import Home from "./components/Home";
 import VotePost from "./components/VotePost";
 import Login from "./components/Login";
 import VoteDetail from "./components/VoteDetail";
 import SignUp from "./components/SignUp";
+import Mypage from "./components/Mypage";
 import axios from "axios";
 
 function App() {
+  const [isLogin, setIsLogin] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
+
   const dummyData = [
     {
       id: 1,
@@ -32,29 +42,47 @@ function App() {
       createdAt: 2002,
     },
   ];
+  const categoryList = [
+    {
+      title: "sample",
+      id: "1",
+    },
+    {
+      title: "love",
+      id: "2",
+    },
+    {
+      title: "food",
+      id: "3",
+    },
+    {
+      title: "fashion",
+      id: "4",
+    },
+    {
+      title: "trip",
+      id: "5",
+    },
+    {
+      title: "other",
+      id: "6",
+    },
+  ];
 
-  const [voteList, setVoteList] = useState();
-  const [isLogin, setIsLogin] = useState(false);
-  const [accessToken, setAccessToken] = useState("");
-
-  const voteInit = async () => {
-    await axios
-      .get("/vote", {
-        header: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((res) => {
-        setVoteList(res);
-      });
-  };
-
-  useEffect(() => {
-    voteInit();
-  }, []);
+  const history = useHistory();
 
   const accessTokenHandler = (token) => {
     setAccessToken(token);
+  };
+
+  const handleLogout = async () => {
+    await axios
+      .post(`${process.env.REACT_APP_SERVER_EC2_ENDPOINT}/user/logout`)
+      .then((res) => {
+        setAccessToken("");
+        setIsLogin(false);
+        history.push("/login");
+      });
   };
 
   const loginHandler = () => {
@@ -70,8 +98,8 @@ function App() {
         </Route>
         <Route path="/home">
           <Home
-            voteList={voteList}
-            dummyData={dummyData}
+            categoryList={categoryList}
+            handleLogout={handleLogout}
             accessToken={accessToken}
           />
         </Route>
@@ -90,6 +118,9 @@ function App() {
         </Route>
         <Route path="/signup">
           <SignUp />
+        </Route>
+        <Route path="/mypage">
+          <Mypage />
         </Route>
       </Switch>
     </BrowserRouter>

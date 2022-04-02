@@ -21,7 +21,7 @@ export default function VotePost({ accessToken }) {
   const votePostHandler = async () => {
     await axios
       .post(
-        "/vote",
+        `${process.env.REACT_APP_SERVER_EC2_ENDPOINT}/vote`,
         {
           voteTitle: votePostinfo.voteTitle,
           category: votePostinfo.category,
@@ -29,16 +29,23 @@ export default function VotePost({ accessToken }) {
           voteOption2: votePostinfo.voteOption2,
         },
         {
-          "Content-Type": "application/json",
-        },
-        {
           header: {
             Authorization: `Bearer ${accessToken}`,
           },
+        },
+        {
+          "Content-Type": "application/json",
         }
       )
       .then((res) => {
         history.push("/home");
+      })
+      .catch((err) => {
+        if (err.status === 404 || err.status === 403) {
+          history.push("/login");
+        } else {
+          console.log(err);
+        }
       });
   };
   return (
@@ -134,13 +141,24 @@ export default function VotePost({ accessToken }) {
         </div>
       </div>
       <div>
-        <button
-          onClick={votePostHandler}
-          className="flex-shrink-0 hover:bg-teal-500 bg-teal-500 border-teal-500 hover:border-teal-500 hover:text-black text-white text-sm border-4 py-1 px-2 rounded"
-          type="button"
-        >
-          확인
-        </button>
+        <span className="pr-10">
+          <button
+            onClick={() => history.goBack()}
+            className="flex-shrink-0 hover:bg-teal-500 bg-teal-500 border-teal-500 hover:border-teal-500 hover:text-black text-white text-sm border-4 py-1 px-2 rounded"
+            type="button"
+          >
+            취소하기
+          </button>
+        </span>
+        <span className="pl-10">
+          <button
+            onClick={votePostHandler}
+            className="flex-shrink-0 hover:bg-teal-500 bg-teal-500 border-teal-500 hover:border-teal-500 hover:text-black text-white text-sm border-4 py-1 px-2 rounded"
+            type="button"
+          >
+            게시하기
+          </button>
+        </span>
       </div>
     </div>
   );
