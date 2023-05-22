@@ -20,9 +20,9 @@ export default function Login() {
   // 유효성 검사
   const [isEmail, setIsEmail] = useState(false);
 
-  // useEffect(() => {
-  //   if (isLogin) history.replace("/home");
-  // }, [isLogin]);
+  useEffect(() => {
+    if (isLogin) history.replace("/home");
+  }, [isLogin]);
 
   const loginButtonClass = () => {
     if (userInfo.email.length && userInfo.password.length && isEmail)

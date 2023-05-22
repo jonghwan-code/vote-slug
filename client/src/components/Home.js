@@ -329,13 +329,13 @@ export default function Home({ category }) {
                     {vote.voteTitle}
                   </div>
                   <div className="flex justify-center z-20">
-                    <div className="break-all h-[120px] flex justify-center items-center w-full p-2 border border-[#d3d3d3] rounded-[8px] relative mr-4">
+                    <div className="break-words text-center h-[120px] flex justify-center items-center w-full p-2 border border-[#d3d3d3] rounded-[8px] relative mr-4">
                       {vote.voteOption1}
                       <div className="absolute z-10 right-[-25px] top-[44px] rounded-full w-8 h-8 bg-VsRed flex justify-center items-center text-[14px] text-white font-normal border-[2px] border-white">
                         VS
                       </div>
                     </div>
-                    <div className="break-all h-[120px] flex justify-center items-center w-full p-2 border border-[#d3d3d3] rounded-[8px] z-0">
+                    <div className="break-words text-center h-[120px] flex justify-center items-center w-full p-2 border border-[#d3d3d3] rounded-[8px] z-0">
                       {vote.voteOption2}
                     </div>
                   </div>

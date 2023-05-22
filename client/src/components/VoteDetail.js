@@ -261,7 +261,7 @@ export default function VoteDetail() {
                   onClick={postDataHandler("voteOption1")}
                   className={winnerClass(option1Percent)}
                 >
-                  <div className="flex flex-col items-center justify-center">
+                  <div className="flex flex-col items-center justify-center break-words">
                     <div className="mb-2">{voteData.voteOption1}</div>
                     {participation && <div>{option1Percent}%</div>}
                   </div>
@@ -275,7 +275,7 @@ export default function VoteDetail() {
                   onClick={postDataHandler("voteOption2")}
                   className={winnerClass(option2Percent, "right")}
                 >
-                  <div className="flex flex-col items-center justify-center">
+                  <div className="flex flex-col items-center justify-center break-words">
                     <div className="mb-2">{voteData.voteOption2}</div>
                     {participation && <div>{option2Percent}%</div>}
                   </div>
