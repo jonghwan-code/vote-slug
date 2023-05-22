@@ -24,7 +24,6 @@ function App() {
   ];
 
   const isLogin = useSelector((state) => state.isLogin.value);
-  console.log("hello world")
   return (
     <>
       <BrowserRouter>
